@@ -5,6 +5,10 @@ VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostForWasmConsole", "HostForWasmConsole\HostForWasmConsole.csproj", "{FCA6EEBF-E562-4080-B14E-0653BA774887}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WasmConsoleApp", "WasmConsoleApp\WasmConsoleApp.csproj", "{69C675EB-0EDF-4A72-A337-52D9F1DF62EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{75C6D558-B482-4451-B86F-2888D642BDD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{FCA6EEBF-E562-4080-B14E-0653BA774887}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCA6EEBF-E562-4080-B14E-0653BA774887}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCA6EEBF-E562-4080-B14E-0653BA774887}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69C675EB-0EDF-4A72-A337-52D9F1DF62EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69C675EB-0EDF-4A72-A337-52D9F1DF62EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69C675EB-0EDF-4A72-A337-52D9F1DF62EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69C675EB-0EDF-4A72-A337-52D9F1DF62EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75C6D558-B482-4451-B86F-2888D642BDD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75C6D558-B482-4451-B86F-2888D642BDD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75C6D558-B482-4451-B86F-2888D642BDD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75C6D558-B482-4451-B86F-2888D642BDD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

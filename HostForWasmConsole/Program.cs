@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
+using WasmConsoleApp;
+
 using Wasmtime;
 
 namespace HostForWasmConsole;
@@ -34,7 +36,9 @@ internal class Program {
         Console.WriteLine("Calling Startup");
         isoApp.InvokeVoid("Startup");
 
-        await Task.Delay(TimeSpan.FromSeconds(3));
+        //await Task.Delay(TimeSpan.FromSeconds(1));
+        isoApp.InvokeVoid("SetTaskCompletionSource");
+        await Task.Delay(TimeSpan.FromSeconds(2));
 
         Console.WriteLine("Calling End");
         isoApp.InvokeVoid("End");

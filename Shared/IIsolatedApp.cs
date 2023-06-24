@@ -13,6 +13,7 @@ public interface IIsolatedApp {
 
     #region Methods
     public void Startup();
+    public void EnumerateAsyncStateMachine();
     public void End();
     #endregion
 }

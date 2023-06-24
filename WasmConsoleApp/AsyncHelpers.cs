@@ -77,3 +77,49 @@ internal class ExclusiveTaskScheduler : TaskScheduler {
 
     public override int MaximumConcurrencyLevel => 1;
 }
+
+internal class ExclusiveDelay {
+    public ExclusiveDelay() {
+
+    }
+
+    public void TriggerAfter(Action callback, TimeSpan delay) {
+        TriggerOn(callback, DateTime.Now + delay);
+    }
+
+    public void TriggerOn(Action callback, DateTime notBefore) {
+        if (notBefore <= DateTime.Now) {
+            callback();
+            return;
+        }
+        lock (@lock) {
+            callbacks.Add((callback, notBefore));
+        }
+    }
+
+    public void RefreshDelayCallbacks() {
+        lock (@lock) {
+            for (int i = callbacks.Count - 1; i >= 0; i--) {
+                (Action callback, DateTime notBefore) = callbacks[i];
+                if (notBefore > DateTime.Now)
+                    continue;
+                callbacks.RemoveAt(i);
+                callback();
+            }
+        }
+    }
+
+    public static ExclusiveDelay Default = new();
+    public static Task Delay(TimeSpan delay) => Default.Delay(delay);
+
+    readonly List<(Action callback, DateTime notBefore)> callbacks = new();
+    readonly object @lock = new();
+}
+
+static class ExclusiveDelay_Extensions {
+    public static Task Delay(this ExclusiveDelay exclusiveDelay, TimeSpan delay) {
+        var tcs = new TaskCompletionSource<bool>();
+        exclusiveDelay.TriggerAfter(() => tcs.SetResult(true), delay);
+        return tcs.Task;
+    }
+}

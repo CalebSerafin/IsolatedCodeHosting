@@ -30,7 +30,6 @@ public class Program : IIsolatedApp {
 
     public void Startup() {
         _ = StartupAsync();
-        synchronizationContext.BeginMessageLoop();
     }
 
     public async Task StartupAsync() {
@@ -48,8 +47,7 @@ public class Program : IIsolatedApp {
 
         await tcs.Task;
         Console.WriteLine("Finished awaiting tcs.Task");
-        //await Task.Delay(TimeSpan.FromSeconds(1));
-        //Timer timer = new Timer((object? state) => { Console.WriteLine("Inside Timer!"); }, null, 0, 1000);
+        await ExclusiveDelay.Delay(TimeSpan.FromSeconds(1));
         Console.WriteLine("Finished awaiting Task.Delay");
     }
 
@@ -57,6 +55,11 @@ public class Program : IIsolatedApp {
         Console.WriteLine($"Setting TaskCompletionSource!");
         tcs.SetResult();
         //AsyncHelpers.RunSync(async () => { Console.WriteLine($"refresh state machine"); });
+    }
+
+    public void EnumerateAsyncStateMachine() {
+        synchronizationContext.BeginMessageLoop();
+        ExclusiveDelay.Default.RefreshDelayCallbacks();
     }
 
     public void End() {

@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WasmConsoleApp", "WasmConso
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{75C6D558-B482-4451-B86F-2888D642BDD4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WasiConsoleApp", "WasiConsoleApp\WasiConsoleApp.csproj", "{159C8906-AFA6-459D-A071-6D443B212C2C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{75C6D558-B482-4451-B86F-2888D642BDD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75C6D558-B482-4451-B86F-2888D642BDD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75C6D558-B482-4451-B86F-2888D642BDD4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{159C8906-AFA6-459D-A071-6D443B212C2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{159C8906-AFA6-459D-A071-6D443B212C2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{159C8906-AFA6-459D-A071-6D443B212C2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{159C8906-AFA6-459D-A071-6D443B212C2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

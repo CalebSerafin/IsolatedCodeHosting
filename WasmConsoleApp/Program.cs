@@ -12,20 +12,42 @@ using Shared;
 namespace WasmConsoleApp;
 
 public class Program : IIsolatedApp {
-    public static void Main() { }
+    public static async Task Main() {
+        Console.WriteLine("Hello, this app is intended to run from the HostForWasmConsole. However, this can be used as a debugging method.");
+
+
+        Program isolatedWorker = new();
+        _ = Task.Run(isolatedWorker.EnumerateAsyncStateMachine);
+        _ = Task.Run(isolatedWorker.Startup);
+        await Task.Delay(TimeSpan.FromSeconds(1));
+
+        isolatedWorker.SetTaskCompletionSource();
+
+        await Task.Delay(TimeSpan.FromSeconds(1));
+
+        // Dispose early to show that worker end method is called.
+        isolatedWorker.End();
+
+        await Task.Delay(TimeSpan.FromSeconds(1));
+    }
 
     public int HostVersion { get; set; } = -1;
     public string HostVersionFriendly { get; set; } = "Un-Initialized";
 
-    Program() {
+    public Program() {
         Console.WriteLine("Hello from the isolated app constructor");
-        SynchronizationContext.SetSynchronizationContext(synchronizationContext);
-        taskScheduler = new(synchronizationContext);
-        taskFactory = new(cancellationTokenSource.Token, TaskCreationOptions.None, TaskContinuationOptions.None, taskScheduler);
+        if (isWasm) {
+            SynchronizationContext.SetSynchronizationContext(synchronizationContext);
+            taskScheduler = new ExclusiveTaskScheduler(synchronizationContext);
+            taskFactory = new TaskFactory(cancellationTokenSource.Token, TaskCreationOptions.None, TaskContinuationOptions.None, taskScheduler);
 
-        typeof(TaskScheduler)
-           .GetField("s_defaultTaskScheduler", BindingFlags.Static | BindingFlags.NonPublic)!
-           .SetValue(null, taskScheduler);
+            typeof(TaskScheduler)
+               .GetField("s_defaultTaskScheduler", BindingFlags.Static | BindingFlags.NonPublic)!
+               .SetValue(null, taskScheduler);
+        } else {
+            taskScheduler = TaskScheduler.Default;
+            taskFactory = Task.Factory;
+        }
     }
 
     public void Startup() {
@@ -34,15 +56,14 @@ public class Program : IIsolatedApp {
 
     public async Task StartupAsync() {
         Console.WriteLine("Hello from the isolated app startup async");
-        Console.WriteLine($"Loaded on host version: {HostVersion}, {HostVersionFriendly}");
-        Console.WriteLine($"Hello from StartupAsync on runtime: {RuntimeInformation.OSArchitecture}");
+        Console.WriteLine($"Loaded on host version: {HostVersion}, {HostVersionFriendly}; runtime: {RuntimeInformation.OSArchitecture}");
 
         await Task.Run(() => {
-            Console.WriteLine($"Hello from nested Task.Run with hopefully right context.");
+            Console.WriteLine($"Hello nested Task.Run.");
         });
 
         _ = Task.Factory.StartNew(() => {
-            Console.WriteLine($"Hello from nested Task.Factory.StartNew with hopefully right context.");
+            Console.WriteLine($"Hello from Task.Factory.StartNew.");
         });
 
         await tcs.Task;
@@ -54,7 +75,6 @@ public class Program : IIsolatedApp {
     public void SetTaskCompletionSource() {
         Console.WriteLine($"Setting TaskCompletionSource!");
         tcs.SetResult();
-        //AsyncHelpers.RunSync(async () => { Console.WriteLine($"refresh state machine"); });
     }
 
     public void EnumerateAsyncStateMachine() {
@@ -69,6 +89,7 @@ public class Program : IIsolatedApp {
     readonly TaskCompletionSource tcs = new();
     readonly CancellationTokenSource cancellationTokenSource = new();
     readonly ExclusiveSynchronizationContext synchronizationContext = new();
-    readonly ExclusiveTaskScheduler taskScheduler;
+    readonly TaskScheduler taskScheduler;
     readonly TaskFactory taskFactory;
+    readonly bool isWasm = RuntimeInformation.OSArchitecture == Architecture.Wasm;
 }

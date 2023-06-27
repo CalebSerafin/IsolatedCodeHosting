@@ -12,3 +12,10 @@ The temporary replacement for `Task.Delay` works similarly to this. <br/>
 ## Next Steps
 Find a suitable replacement or fix for Timers. <br/>
 Fixing Timers will allow the regular `Task.Delay` method to work and other .NET features. <br/>
+
+## System Architecture
+### Logical Data Separation
+![Logical Data Separation](./Docs/SystemArchitectureLogicalData.drawio.png)
+
+### Communication Across API Boundaries
+![Communication Across API Boundaries](./Docs/SystemArchitectureLogosAnnotated.drawio.png)
